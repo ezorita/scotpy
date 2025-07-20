@@ -1,0 +1,202 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "python_template"
+version = "0.0.1"
+description = ""
+authors = ["John Smith <john.smith@example.com>"]
+readme = "README.md"
+packages = [{include = "python_template", from="src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.12.0"
+pyright = "^1.1.403"
+pre-commit = "^3.3.3"
+poethepoet = "^0.20.0"
+pytest-cov = "^4.1.0"
+
+[tool.poetry.scripts]
+start="python_template:main"
+
+[tool.poe.tasks]
+test = "poetry run pytest test/"
+test_benchmark = "poetry run pytest test/ -v -m benchmark"
+test_cov = "poetry run pytest -v test/ --cov=./src/ --cov-branch --cov-report=term --cov-report=term-missing --cov-report=lcov:coverage.lcov --junitxml=pytest.xml"
+test_codecov = "poetry run pytest -v test/ --cov=./src/ --cov-branch --cov-report=xml"
+format = "poetry run ruff format ."
+check_format = "poetry run ruff format --check ."
+lint = "poetry run ruff check ."
+typecheck = "poetry run pyright ."
+
+
+[tool.ruff]
+target-version = "py310"  # Target Python version for linting
+line-length = 100  # Maximum line length
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "__pycache__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "*pb2.py",
+]
+
+[tool.ruff.lint]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`) codes by default.
+select = [
+    # Code style and formatting
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+
+    # Quality and best practices
+    "A",  # flake8-builtins
+    "B",  # flake8-bugbear
+    "C",  # flake8-comprehensions
+    "N",  # pep8-naming
+    "SIM",  # flake8-simplify
+    "UP",  # pyupgrade
+
+    # Imports
+    "I",  # isort
+
+    # Docstrings
+    "D",  # pydocstyle
+
+    # Complexity
+    "C90",  # mccabe
+
+    # Quotes
+    "Q",  # flake8-quotes
+
+    # Type checking
+    "TCH",  # flake8-type-checking
+
+    # Testing
+    "PT",  # flake8-pytest-style
+
+    # Function and method behavior
+    "ARG",  # flake8-unused-arguments
+    "RET",  # flake8-return
+
+    # Miscellaneous
+    "COM",  # flake8-commas
+    "ERA",  # eradicate
+    "PL",  # pylint
+]
+ignore = ["COM812", "PLR0913"]  # Ignore specific error codes
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["A", "B", "C", "D", "E", "F", "I", "W", "Q", "COM"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["D104", "F401"]  # Ignore unused imports and docstrings in __init__.py files
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "double"
+multiline-quotes = "double"
+docstring-quotes = "double"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true
+docstring-code-line-length = "dynamic"
+
+[tool.ruff.lint.isort]
+case-sensitive = false
+combine-as-imports = true
+force-single-line = false
+force-sort-within-sections = false
+forced-separate = []
+from-first = false
+lines-after-imports = 2
+lines-between-types = 0
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+split-on-trailing-comma = true
+
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = true
+ignore-magic = true
+ignore-semiprivate = false
+ignore-private = false
+ignore-module = false
+fail-under = 95
+exclude = ["setup.py", "docs", "build"]
+ignore-regex = ["^get$", "^mock_.*", ".*BaseClass.*"]
+verbose = 0
+quiet = false
+whitelist-regex = []
+color = true
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
+testpaths = [
+    "test",
+    "integration",
+]
+markers = [
+    "benchmark: marks tests as benchmark (deselect with '-m \"not benchmark\"')",
+    "config: marks tests for configurations (deselect with '-m \"not config\"')",
+    "dummy: marks dummy tests (deselect with '-m \"not dummy\"')",
+    "collator: marks tests for the collator (deselect with '-m \"not collator\"')",
+    "gpu: marks tests using a GPU (deselect with '-m \"not gpu\"')",
+    "diskspace: marks tests as requiring disk space (deselect with '-m \"not diskspace\"')",
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
+
+[tool.coverage.run]
+omit = [
+    "*/__init__.py",
+    "*/test/*",
+    "*/test_*.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+    "pass",
+    "except ImportError:",
+]

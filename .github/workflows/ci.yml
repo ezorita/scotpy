@@ -1,0 +1,245 @@
+name: scot.py CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  PYTHON_VERSIONS: '["3.10", "3.11", "3.12"]'
+
+jobs:
+  define-python-versions:
+    name: Define Python Versions
+    runs-on: ubuntu-latest
+    outputs:
+      python-versions: ${{ env.PYTHON_VERSIONS }}
+
+  setup:
+    name: Setup Environment (python ${{ matrix.python-version }})
+    needs: [define-python-versions]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ${{ fromJSON(needs.define-python-versions.outputs.python-versions) }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache poetry environment
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-python-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        run: |
+          pip install poetry
+          export POETRY_VIRTUALENVS_IN_PROJECT=true
+          poetry install --with dev
+
+  format:
+    needs: [setup, define-python-versions]
+    name: File formatting (ruff)
+    runs-on: ubuntu-latest
+    env:
+      PYTHON_VERSION: ${{ fromJSON(needs.define-python-versions.outputs.python-versions)[0] }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Restore poetry environment
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Format Check
+        run: |
+          source .venv/bin/activate
+          poetry run poe check_format
+
+  lint:
+    needs: [setup, format, define-python-versions]
+    name: Linter (ruff)
+    runs-on: ubuntu-latest
+    env:
+      PYTHON_VERSION: ${{ fromJSON(needs.define-python-versions.outputs.python-versions)[0] }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Restore poetry environment
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Lint Check
+        run: |
+          source .venv/bin/activate
+          poetry run poe lint
+
+  type_check:
+    needs: [setup, format, define-python-versions]
+    name: Type Check (pyright)
+    runs-on: ubuntu-latest
+    env:
+      PYTHON_VERSION: ${{ fromJSON(needs.define-python-versions.outputs.python-versions)[0] }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Restore poetry environment
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Type Check
+        run: |
+          source .venv/bin/activate
+          poetry run poe typecheck
+
+  test:
+    needs: [setup, lint, define-python-versions]
+    name: Run tests (pytest) - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        python-version: ${{ fromJSON(needs.define-python-versions.outputs.python-versions) }}
+    steps:
+      - uses: actions/checkout@v3
+
+      # EDIT THIS STEP IF YOU HAVE A PRIVATE DEPENDENCY, OTHERWISE REMOVE IT
+      - uses: actions/checkout@v3
+      - name: Checkout private dependency TARGET_REPOSITORY
+        shell: bash
+        run: |
+          # Requisite:
+          # Create a key pair and store it as a deployment key in the
+          # target private repository.
+
+          # Load private key
+          cd ../
+          echo "${{ secrets.DEPLOY_KEY_TARGET_REPOSITORY }}" > deploy_key
+          chmod 600 deploy_key
+
+          # Clone repository with deploy key
+          export GIT_SSH_COMMAND="ssh -i $(pwd)/deploy_key"
+          git clone git@github.com:user/repository.git
+
+          # Attempt to Checkout same branch as this PR
+          echo "Attempting to checkout branch: ${{ github.head_ref }}"
+          git -C repository checkout ${{ github.head_ref }} || true
+
+          rm deploy_key
+
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Restore poetry environment
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-python-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Run tests
+        run: |
+          source .venv/bin/activate
+          poetry run poe test_codecov
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_GLOBAL_TOKEN }}
+          slug: ${{ github.repository }}
+
+  license-check:
+    name: Check Dependency Licenses
+    runs-on: ubuntu-22.04
+    needs: [format, lint, define-python-versions]
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ fromJSON(needs.define-python-versions.outputs.python-versions)[0] }}
+
+      - name: Install Dependencies
+        run: |
+          pip install licensecheck==2024.3
+
+      - name: Run License Check
+        id: license-check
+        run: |
+          echo "LICENSE_OUTPUT<<EOF" >> $GITHUB_ENV
+          licensecheck -l Proprietary -u poetry:dev \
+          >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Comment PR
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = process.env.LICENSE_OUTPUT;
+            const commentBody = '## License Check Results\n\n```\n' + output + '\n```';
+
+            // Get all comments
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            // Find existing license check comment
+            const existingComment = comments.data.find(comment =>
+              comment.body.includes('## License Check Results')
+            );
+
+            if (existingComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: commentBody
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: commentBody
+              });
+            }

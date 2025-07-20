@@ -1,0 +1,65 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+# Don't run pre-commit on files under third-party/
+exclude: "^\
+  (third-party/.*)\
+  "
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-toml # Checks toml files for parseable syntax
+      - id: check-json # Checks json files for parseable syntax
+      - id: check-added-large-files # Prevents giant files from being committed
+      - id: check-case-conflict # Checks for files that would conflict in case-insensitive filesystems
+      - id: check-merge-conflict # Checks for files that contain merge conflict strings
+      - id: check-yaml # Checks yaml files for parseable syntax
+      - id: detect-private-key # detects the presence of private keys.
+      - id: end-of-file-fixer # ensures that a file is either empty, or ends with one newline.
+      - id: fix-byte-order-marker # removes utf-8 byte order marker.
+      - id: mixed-line-ending # replaces or checks mixed line ending.
+      - id: trailing-whitespace # trims trailing whitespace.
+
+  - repo: https://github.com/sirosen/check-jsonschema
+    rev: 0.23.2
+    hooks:
+      - id: check-github-actions
+      - id: check-github-workflows
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.3
+    hooks:
+      - id: ruff
+        args: [--fix, --config=pyproject.toml] # Runs Ruff linter with configuration from pyproject.toml
+      - id: ruff-format
+        args: [--config=pyproject.toml] # Runs Ruff formatter with configuration from pyproject.toml
+
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.403
+    hooks:
+      - id: pyright
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.10
+    hooks:
+      - id: bandit
+        args:
+          [
+            "-f",
+            "custom",
+            "-o",
+            "bandit-report.txt",
+            "-x",
+            "test/",
+            "--recursive",
+            "--severity-level",
+            "medium",
+          ]
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ["--baseline", ".secrets.baseline"] # Scans for secrets using a baseline file
