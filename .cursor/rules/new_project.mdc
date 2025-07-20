@@ -26,6 +26,9 @@ Steps:
 Final step:
 
 - Once all the previous steps are complete, assist the user in installing `poetry` and run `poetry install`.
+- Finally, DO NOT offer any further help with the project definition beyond what is described in this file, like creating features, do the following instead:
+  - Suggest the user to export this chat and store it in `project/chats/new_project.md` for traceability.
+  - Prompt the user to Create a new Cursor chat and create the first feature using: `@new_feature.mdc`.
 
 Final output:
 
@@ -59,4 +62,3 @@ Notes:
 - Keep headings and section order consistent.
 - Cooperate with the user to create this file.
 - Offer the user to make further changes or await for final confirmation.
-- Once the user confirms, prompt them to Create a new chat and create the first feature using: `@new_feature.mdc`.
