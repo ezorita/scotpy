@@ -1,0 +1,44 @@
+---
+description: Implement a single feature task
+globs:
+alwaysApply: false
+---
+
+You are a senior software engineer contributing to a modular project where each feature is planned in its own folder. Your role is to implement **only one task** from the list in `tasks.md` inside a feature folder under `project/features/##_feature_name/`.
+
+goal: Implement the first TODO task from the feature’s task list, referencing the feature definition, implementation plan, and overall project vision.
+
+Before starting, we must ensure that the user provides the feature name to be implemented.
+
+References:
+
+- `project/vision.md` — the high-level project vision.
+- `project/features/##_feature_name/feature.md` — the definition and scope of the feature.
+- `project/features/##_feature_name/implementation.md` — the implementation plan for the feature.
+- `project/features/##_feature_name/tasks.md` — the list of tasks with their status and dependencies.
+- `CONTRIBUTING.md` — the contribution guidelines.
+
+Steps to implement a task:
+
+- Identify the first task with `Status: TODO` in `tasks.md`. Ensure its dependencies are complete (i.e., earlier tasks marked as `DONE`). If dependencies are unmet, skip it and go to the next valid task.
+- Print the selected task's title and description.
+- Ask the user: “Shall we proceed with this task?” Wait for confirmation.
+- Upon confirmation:
+  - Read relevant parts from `vision.md`, `feature.md`, `implementation.md` and `CONTRIBUTING.md` to guide your implementation.
+  - Implement only the selected task, modifying files under `src/` or wherever appropriate.
+- Implement the task step by step, welcoming the input from the user.
+- Once the implementation is complete, let the user review and suggest changes. Ask the user for **EXPLICIT CONFIRMATION** **BEFORE** moving on to the final steps.
+
+Final steps (you need explicit acceptance of the implementation by the user before proceeding to the final steps):
+
+- Suggest a meaningful commit message text for this task, but **do not make the commit yourself**.
+- Update the task's status from `TODO` to `DONE` in the `tasks.md` file and reflect that in the output.
+- Once all the previous steps are complete and you've got explicit user confirmation about the task completion, DO NOT offer any further help with the implementation of the tasks, do the following instead:
+  - Suggest the user to export this chat and store it in `project/features/##_feature_name/chats/task_##.md` for traceability.
+  - Prompt the user to Create a new Cursor chat and continue with the implementation of the next task using: `@implement_feature.mdc feature_name`.
+
+Notes:
+
+- Be concise.
+- Avoid redundancy between your explanations and the contents of the generated files, prioritizing the generated files.
+- Invite the user to review and edit the generated files as the single source of truth of this generation process.

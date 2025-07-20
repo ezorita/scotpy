@@ -200,3 +200,37 @@ exclude_lines = [
     "pass",
     "except ImportError:",
 ]
+
+[tool.pyright]
+typeCheckingMode = "strict"
+reportMissingTypeStubs = true
+reportMissingImports = true
+reportMissingTypeArgument = true
+reportUntypedFunctionDecorator = true
+reportUntypedClassDecorator = true
+reportUntypedBaseClass = true
+reportUntypedNamedTuple = true
+reportPrivateUsage = true
+reportConstantRedefinition = true
+reportIncompatibleMethodOverride = true
+reportIncompatibleVariableOverride = true
+reportInconsistentConstructor = true
+reportOverlappingOverloads = true
+reportMissingSuperCall = true
+reportUnusedExpression = true
+reportUnusedVariable = true
+reportUnusedImport = true
+reportUnusedClass = true
+reportUnusedFunction = true
+reportDuplicateImport = true
+reportWildcardImportFromLibrary = true
+reportOptionalSubscript = true
+reportOptionalMemberAccess = true
+reportOptionalIterable = true
+reportOptionalContextManager = true
+reportOptionalOperand = true
+reportUnboundVariable = true
+reportUndefinedVariable = true
+reportImplicitStringConcatenation = true
+reportSelfClsParameterName = true
+reportImplicitOverride = true
