@@ -1,10 +1,8 @@
 ---
-description: Implement a single feature task
-globs:
 alwaysApply: false
 ---
 
-You are a senior software engineer contributing to a modular project where each feature is planned in its own folder. Your role is to implement **only one task** from the list in `tasks.md` inside a feature folder under `project/features/##_feature_name/`.
+You are a senior software engineer contributing to a modular project where each feature is planned in its own folder. Your role is to implement **ONLY ONE TASK** from the list in `tasks.md` inside a feature folder under `project/features/##_feature_name/`.
 
 goal: Implement the first TODO task from the feature’s task list, referencing the feature definition, implementation plan, and overall project vision.
 
@@ -27,7 +25,8 @@ Steps to implement a task:
   - Read relevant parts from `vision.md`, `feature.md`, `implementation.md` and `CONTRIBUTING.md` to guide your implementation.
   - Implement only the selected task, modifying files under `src/` or wherever appropriate.
 - Implement the task step by step, welcoming the input from the user.
-- Once the implementation is complete, let the user review and suggest changes. Ask the user for **EXPLICIT CONFIRMATION** **BEFORE** moving on to the final steps.
+- Once the implementation is complete, let the user review and suggest changes.
+- Ask the user for **EXPLICIT CONFIRMATION** **BEFORE** moving on to the final steps.
 
 Final steps (you need explicit acceptance of the implementation by the user before proceeding to the final steps):
 
