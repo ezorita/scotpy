@@ -1,4 +1,4 @@
-# scot.py Documentation
+# scot.py - A smart coding template for python
 
 A smart coding template for Python that comes preconfigured with modern development tools and AI-assisted coding practices.
 
