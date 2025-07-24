@@ -32,6 +32,7 @@ format = "poetry run ruff format ."
 check_format = "poetry run ruff format --check ."
 lint = "poetry run ruff check ."
 typecheck = "poetry run pyright ."
+check = ["check_format", "lint", "typecheck", "test"]
 
 
 [tool.ruff]
