@@ -123,6 +123,14 @@ poetry run pre-commit install
 
 **Note**: The pre-commit hooks will automatically run code quality checks (linting, type checking) before each commit, ensuring consistent code quality.
 
+⚠️ **IMPORTANT**: Configure your Python interpreter in Cursor:
+
+1. After running `poetry install`, press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
+2. Search for "Python: Select Interpreter"
+3. Choose the Poetry virtual environment interpreter (usually shows the project name)
+
+This enables AI agents to see your dependencies and provide accurate code suggestions.
+
 ## Assisted AI Coding Workflow
 
 ### 1. Setting Up a New Project
