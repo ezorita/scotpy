@@ -1,12 +1,23 @@
-# <img width="80" height="80" alt="scotpy_logo" src="https://github.com/user-attachments/assets/c2074c55-f90d-462a-aa71-3456ec9766e0" />  scot.py - A smart coding template for python
+# <img width="80" height="80" alt="scotpy_logo" src="https://github.com/user-attachments/assets/c2074c55-f90d-462a-aa71-3456ec9766e0" /> scot.py - A smart coding template for python
 
 A smart coding template for Python that comes preconfigured with modern development tools and AI-assisted coding practices.
+
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+- [Assisted AI Coding Workflow](#assisted-ai-coding-workflow)
+  - [1. Setting Up a New Project](#1-setting-up-a-new-project)
+  - [2. Creating Features](#2-creating-features)
+  - [3. Implementing Tasks](#3-implementing-tasks)
+- [Best Practices](#best-practices)
+- [Template details](#template-details)
+- [License](#license)
+- [Contributing to the Template](#contributing-to-the-template)
 
 ## Overview
 
 **scot.py** is a comprehensive Python project template designed to accelerate development with best practices built-in. It includes everything you need for professional Python development: linting, type checking, dependency management, CI/CD, and most importantly, optimized Cursor AI rules for enhanced AI-assisted development.
 
-## Features
+### Features
 
 - **Development Tools**: Pre-configured with Poetry, Ruff linter, Pyright type checker
 - **CI/CD**: GitHub Actions workflow with format checking, linting, testing and coverage reports
@@ -15,7 +26,7 @@ A smart coding template for Python that comes preconfigured with modern developm
 - **Code Quality**: High-quality code style guidelines and contribution templates
 - **License Compliance**: Automated license checking in CI pipeline
 
-## Requirements
+### Requirements
 
 - **Cursor**: Version 1.0 or higher
 - **Python**: Version 3.10 or higher
@@ -84,8 +95,6 @@ cp CONTRIBUTING.md /path/to/your/project/
 
 - **Guidelines**: Update `CONTRIBUTING.md` to match your project's contribution guidelines. You can ask the Cursor Agent to help adapt it based on your existing codebase.
 - **Development tools**: Copy the relevant sections of `pyproject.toml` if you want to use the same development tools as the template (recommended).
-
-## Python Environment Setup
 
 ### Python Version Management
 
@@ -156,21 +165,32 @@ poetry run pre-commit install
 4. Review the generated files and confirm
 5. **For next task**: Open a fresh Cursor chat to clear context and improve implementation effectiveness
 
-## Technical Stack
+## Best Practices
+
+- **Start Fresh**: Use new Cursor chats for each major task to maintain clean context
+- **Review Everything**: Always review AI-generated code and plans before confirming
+- **Follow the Workflow**: Use the three-step process (project → feature → implementation) for best results
+- **Leverage AI Models**: Use Claude 4 for high-level planning, Auto mode for implementation
+- **Maintain Documentation**: Keep project and feature documentation updated as you develop
+- **Traceability**: Export all conversations and store them in `chat/` folders for traceability
+
+## Template details
+
+### Preconfigured tools
 
 | Component                 | Tool           | Purpose                                        |
-| ------------------------- | -------------- | ---------------------------------------------- | --- |
+| ------------------------- | -------------- | ---------------------------------------------- |
 | **Dependency Management** | Poetry         | Package management and virtual environments    |
 | **Linting**               | Ruff           | Fast Python linter and formatter               |
 | **Type Checking**         | Pyright        | Static type analysis                           |
 | **Pre-commit Hooks**      | pre-commit     | Automated code quality checks before commits   |
 | **CI/CD**                 | GitHub Actions | Automated testing, linting, and quality checks |
 | **Coverage**              | Codecov        | Test coverage reporting in CI                  |
-| **License Compliance**    | Automated      | License header verification in Pull Request    | \   |
+| **License Compliance**    | Automated      | License header verification in Pull Request    |
 
 **Coverage**: You can set up [codecov](https://codecov.io) by setting this secret in your repository (or global secret in organization): `CODECOV_GLOBAL_TOKEN`. If you do not wish to use codecov for code coverage, either delete the action from `.github/workflows/ci.yml` or update it to use your preferred provider.
 
-## Useful commands
+### Useful commands
 
 ```bash
 # Code quality
@@ -191,7 +211,7 @@ poetry run pre-commit run               # Run pre-commit hooks on staged files o
 poetry run pre-commit autoupdate        # Update hook versions
 ```
 
-## Project Structure
+### Project Structure
 
 ```
 your-project/
@@ -217,15 +237,6 @@ your-project/
 ├── pyproject.toml             # Project configuration
 └── README.md                  # This document (replace with your project README)
 ```
-
-## Best Practices
-
-- **Start Fresh**: Use new Cursor chats for each major task to maintain clean context
-- **Review Everything**: Always review AI-generated code and plans before confirming
-- **Follow the Workflow**: Use the three-step process (project → feature → implementation) for best results
-- **Leverage AI Models**: Use Claude 4 for high-level planning, Auto mode for implementation
-- **Maintain Documentation**: Keep project and feature documentation updated as you develop
-- **Traceability**: Export all conversations and store them in `chat/` folders for traceability
 
 ## License
 
