@@ -1,6 +1,6 @@
 # <img width="80" height="80" alt="scotpy_logo" src="https://github.com/user-attachments/assets/c2074c55-f90d-462a-aa71-3456ec9766e0" /> scot.py - A smart coding template for python
 
-A smart coding template for Python that comes preconfigured with modern development tools and AI-assisted coding practices.
+**Skip setup, start building.** A smart coding template for Python that comes preconfigured with modern development tools and AI-assisted coding practices.
 
 - [Overview](#overview)
 - [Getting Started](#getting-started)
