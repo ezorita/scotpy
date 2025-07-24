@@ -56,12 +56,13 @@ Before proceeding, review the collected information:
 - Ask about preferred Python version (this template supports python>=3.10)
 - Update the project author names and emails
 - Update `pyproject.toml` with the collected information: project name, python version, author
+- Prompt the user to choose their own license and replace it in `LICENSE`
 
 **Development Environment**
 
 - Confirm Python version matrix for CI in `.github/workflows/ci.yml` (suggest 3.10, 3.11, 3.12), do not make any further changes to this file
 - Rename main module in `src/` from `python_template` to project name
-- Assist the user in installing `poetry` and run `poetry install`
+- Assist the user in installing `poetry` then run `poetry install` and `poetry pre-commit install`
 
 ### Phase 4: Documentation & Handoff
 

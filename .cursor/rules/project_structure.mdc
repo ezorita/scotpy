@@ -1,0 +1,26 @@
+This is the file structure of the smart coding template:
+
+```
+project-name/
+├── .cursor/
+│   └── rules/                 # AI-optimized Cursor rules
+├── .github/
+│   └── workflows/
+│       └── ci.yml             # Continuous integration pipeline
+├── .vscode/                   # Editor settings and extension recommendations
+├── project/                   # Auto-generated project documentation
+│   ├── vision.md              # Project vision (created during setup)
+│   └── 00_feature-name/       # Feature-specific docs (created per feature)
+│       ├── feature.md         # Feature specification and requirements
+│       ├── implementation.md  # Technical implementation strategy
+│       └── tasks.md           # Detailed task breakdown
+├── src/                       # Source code
+├── tests/                     # Test suite
+├── .pre-commit-config.yaml    # Pre-commit hooks configuration
+├── .secrets.baseline          # Known secrets patterns for security scanning
+├── CONTRIBUTING.md            # Development and contribution guidelines
+├── poetry.toml                # Poetry-specific configuration
+├── pyproject.toml             # Project configuration
+├── README.md                  # Your project README
+└── DOCS.md                    # This document (can be deleted after cloning)
+```
